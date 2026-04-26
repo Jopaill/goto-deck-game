@@ -8,7 +8,10 @@ import com.jordanpaille.deckgame.dto.responses.*;
 import com.jordanpaille.deckgame.utils.ShuffleUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
@@ -182,5 +185,67 @@ public class GameService {
             }
         }
         return new GetCountPerSuitResponse(true, null, arr[0], arr[1], arr[2], arr[3]);
+    }
+
+    public ShuffleGameDeckResponse shuffleGameDeck(long gameId) {
+        Game game = gameDao.getGame(gameId);
+        if (null == game) {
+            return new ShuffleGameDeckResponse(false, "Game #" + gameId + " is not found!", gameId);
+        }
+
+        ShuffleUtils.shuffle(game.getCards());
+        return new ShuffleGameDeckResponse(true, null, gameId);
+    }
+
+    public GetRemainingCardCountsResponse getRemainingCardCounts(long gameId) {
+        Game game = gameDao.getGame(gameId);
+        if (null == game) {
+            return new GetRemainingCardCountsResponse(false, "Game #" + gameId + " is not found!", null);
+        }
+
+        Map<Card.Suit, Map<Card.Rank, Integer>> counts = new EnumMap<>(Card.Suit.class);
+        for (Card.Suit suit : Card.Suit.values()) {
+            counts.put(suit, new EnumMap<>(Card.Rank.class));
+            for (Card.Rank rank : Card.Rank.values()) {
+                counts.get(suit).put(rank, 0);
+            }
+        }
+
+        for (Card card : game.getCards()) {
+            Map<Card.Rank, Integer> rankCounts = counts.get(card.suit());
+            rankCounts.put(card.rank(), rankCounts.get(card.rank()) + 1);
+        }
+
+        List<CardCount> cardCounts = new ArrayList<>();
+        Card.Suit[] suitOrder = {
+                Card.Suit.HEARTS,
+                Card.Suit.SPADES,
+                Card.Suit.CLUBS,
+                Card.Suit.DIAMONDS
+        };
+
+        Card.Rank[] rankOrder = {
+                Card.Rank.KING,
+                Card.Rank.QUEEN,
+                Card.Rank.JACK,
+                Card.Rank.TEN,
+                Card.Rank.NINE,
+                Card.Rank.EIGHT,
+                Card.Rank.SEVEN,
+                Card.Rank.SIX,
+                Card.Rank.FIVE,
+                Card.Rank.FOUR,
+                Card.Rank.THREE,
+                Card.Rank.TWO,
+                Card.Rank.ACE
+        };
+
+        for (Card.Suit suit : suitOrder) {
+            for (Card.Rank rank : rankOrder) {
+                cardCounts.add(new CardCount(suit, rank, counts.get(suit).get(rank)));
+            }
+        }
+
+        return new GetRemainingCardCountsResponse(true, null, cardCounts);
     }
 }
