@@ -3,34 +3,22 @@ package com.jordanpaille.deckgame.dao;
 import com.jordanpaille.deckgame.dto.Game;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class GameDao {
-    private final List<Game> games = new ArrayList<>();
+    private final Map<Long, Game> games = new ConcurrentHashMap<>();
 
     public void addGame(Game game) {
-        games.add(game);
+        games.put(game.getGameId(), game);
     }
 
     public Game getGame(long gameId) {
-        for (Game game : games) {
-            if (gameId == game.getGameId()) {
-                return game;
-            }
-        }
-
-        return null;
+        return games.get(gameId);
     }
 
     public Game deleteGame(long gameId) {
-        for (Game game : games) {
-            if (gameId == game.getGameId()) {
-                games.remove(game);
-                return game;
-            }
-        }
-        return null;
+        return games.remove(gameId);
     }
 }

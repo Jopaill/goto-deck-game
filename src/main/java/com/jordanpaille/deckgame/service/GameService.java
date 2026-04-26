@@ -69,8 +69,10 @@ public class GameService {
         List<Card> cards = deck.getCardDeck();
         ShuffleUtils.shuffle(cards);
 
-        // Add the cards to the game
-        game.addCards(cards);
+        synchronized (game) {
+            // Add the cards to the game
+            game.addCards(cards);
+        }
 
         return new AddDeckToGameResponse(true, null, gameId, deckId);
     }
@@ -140,18 +142,20 @@ public class GameService {
             return new DealCardResponse(false, "Card count must be greater than 0", gameId, username, count, 0);
         }
 
-        if (game.getCards().isEmpty()) {
-            return new DealCardResponse(false, "There aren't any cards in the deck of Game #" + gameId, gameId, username, count, 0);
-        }
+        synchronized (game) {
+            if (game.getCards().isEmpty()) {
+                return new DealCardResponse(false, "There aren't any cards in the deck of Game #" + gameId, gameId, username, count, 0);
+            }
 
-        int dealtCardCount = 0;
-        while (dealtCardCount < count && !game.getCards().isEmpty()) {
-            Card card = game.getCards().removeFirst();
-            player.addCardToHand(card);
-            dealtCardCount++;
-        }
+            int dealtCardCount = 0;
+            while (dealtCardCount < count && !game.getCards().isEmpty()) {
+                Card card = game.getCards().removeFirst();
+                player.addCardToHand(card);
+                dealtCardCount++;
+            }
 
-        return new DealCardResponse(true, null, gameId, username, count, dealtCardCount);
+            return new DealCardResponse(true, null, gameId, username, count, dealtCardCount);
+        }
     }
 
     public DealCardResponse dealCard(long gameId, String username) {
@@ -188,16 +192,20 @@ public class GameService {
             return new GetCountPerSuitResponse(false, "Game #" + gameId + " is not found!", -1, -1, -1, -1);
         }
 
-        List<Card> cards = game.getCards();
         int[] arr = new int[4];
-        for (Card card : cards) {
-            switch (card.suit()) {
-                case HEARTS -> arr[0]++;
-                case DIAMONDS -> arr[1]++;
-                case SPADES -> arr[2]++;
-                case CLUBS -> arr[3]++;
+
+        synchronized (game) {
+            List<Card> cards = game.getCards();
+            for (Card card : cards) {
+                switch (card.suit()) {
+                    case HEARTS -> arr[0]++;
+                    case DIAMONDS -> arr[1]++;
+                    case SPADES -> arr[2]++;
+                    case CLUBS -> arr[3]++;
+                }
             }
         }
+
         return new GetCountPerSuitResponse(true, null, arr[0], arr[1], arr[2], arr[3]);
     }
 
@@ -207,7 +215,10 @@ public class GameService {
             return new ShuffleGameDeckResponse(false, "Game #" + gameId + " is not found!", gameId);
         }
 
-        ShuffleUtils.shuffle(game.getCards());
+        synchronized (game) {
+            ShuffleUtils.shuffle(game.getCards());
+        }
+
         return new ShuffleGameDeckResponse(true, null, gameId);
     }
 
@@ -225,9 +236,11 @@ public class GameService {
             }
         }
 
-        for (Card card : game.getCards()) {
-            Map<Card.Rank, Integer> rankCounts = counts.get(card.suit());
-            rankCounts.put(card.rank(), rankCounts.get(card.rank()) + 1);
+        synchronized (game) {
+            for (Card card : game.getCards()) {
+                Map<Card.Rank, Integer> rankCounts = counts.get(card.suit());
+                rankCounts.put(card.rank(), rankCounts.get(card.rank()) + 1);
+            }
         }
 
         List<CardCount> cardCounts = new ArrayList<>();

@@ -1,37 +1,24 @@
 package com.jordanpaille.deckgame.dao;
 
 import com.jordanpaille.deckgame.dto.Deck;
-import com.jordanpaille.deckgame.exceptions.GameException;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class DeckDao {
-    private final List<Deck> decks = new ArrayList<>();
+    private final Map<Long, Deck> decks = new ConcurrentHashMap<>();
 
-    public synchronized void addDeck(Deck deck) {
-        decks.add(deck);
+    public void addDeck(Deck deck) {
+        decks.put(deck.getDeckId(), deck);
     }
 
     public Deck getDeckById(long deckId) {
-        for (Deck deck : decks) {
-            if (deck.getDeckId() == deckId) {
-                return deck;
-            }
-        }
-        return null;
+        return decks.get(deckId);
     }
 
-    public synchronized Deck deleteDeckByDeckId(long deckId) {
-        for (Deck deck : decks) {
-            if (deckId == deck.getDeckId()) {
-                decks.remove(deck);
-                return deck;
-            }
-        }
-        return null;
+    public Deck deleteDeckByDeckId(long deckId) {
+        return decks.remove(deckId);
     }
-
 }
