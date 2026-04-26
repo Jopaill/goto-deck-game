@@ -48,9 +48,21 @@ public class GameService {
     }
 
     public DeleteGameResponse deleteGame(long gameId) {
-        return new DeleteGameResponse(
-                null != gameDao.deleteGame(gameId),
-                gameId);
+        Game deletedGame = gameDao.deleteGame(gameId);
+        if (null == deletedGame) {
+            return new DeleteGameResponse(false, gameId);
+        }
+
+        synchronized (deletedGame) {
+            for (Player player : deletedGame.getPlayers()) {
+                if (player.isCurrentlyPlaying() && player.getGameId() == gameId) {
+                    player.leaveGame();
+                    player.getHand().clear();
+                }
+            }
+        }
+
+        return new DeleteGameResponse(true, gameId);
     }
 
     public AddDeckToGameResponse addDeckToGame(long gameId, long deckId) {
