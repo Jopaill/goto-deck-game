@@ -4,8 +4,8 @@ public record GetCountPerSuitResponse(
         boolean success,
         String errorMessage,
         int numberOfHearts,
-        int numberOfDiamonds,
         int numberOfSpades,
-        int numberOfClubs
+        int numberOfClubs,
+        int numberOfDiamonds
 ) {
 }

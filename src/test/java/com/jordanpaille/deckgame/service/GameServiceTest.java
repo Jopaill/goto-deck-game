@@ -398,8 +398,8 @@ class GameServiceTest {
         assertTrue(response.success());
         assertNull(response.errorMessage());
         assertEquals(2, response.numberOfHearts());
-        assertEquals(1, response.numberOfDiamonds());
         assertEquals(1, response.numberOfSpades());
         assertEquals(2, response.numberOfClubs());
+        assertEquals(1, response.numberOfDiamonds());
     }
 }

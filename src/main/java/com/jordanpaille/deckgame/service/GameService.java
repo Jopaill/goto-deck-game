@@ -212,9 +212,9 @@ public class GameService {
             for (Card card : cards) {
                 switch (card.suit()) {
                     case HEARTS -> arr[0]++;
-                    case DIAMONDS -> arr[1]++;
-                    case SPADES -> arr[2]++;
-                    case CLUBS -> arr[3]++;
+                    case SPADES -> arr[1]++;
+                    case CLUBS -> arr[2]++;
+                    case DIAMONDS -> arr[3]++;
                 }
             }
         }

@@ -5,7 +5,10 @@ import lombok.Getter;
 
 public record Card(Rank rank, Suit suit) {
     public enum Suit {
-        HEARTS, DIAMONDS, SPADES, CLUBS
+        HEARTS,
+        SPADES,
+        CLUBS,
+        DIAMONDS
     }
 
     @Getter
