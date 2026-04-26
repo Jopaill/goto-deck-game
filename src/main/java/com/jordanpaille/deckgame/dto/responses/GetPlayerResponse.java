@@ -5,7 +5,7 @@ import com.jordanpaille.deckgame.dto.Card;
 import java.util.List;
 
 public record GetPlayerResponse(
-        boolean playerExists,
+        boolean success,
         String username,
         List<Card> hand
         ) {}

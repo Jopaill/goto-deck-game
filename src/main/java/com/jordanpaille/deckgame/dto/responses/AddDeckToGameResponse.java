@@ -1,7 +1,7 @@
 package com.jordanpaille.deckgame.dto.responses;
 
 public record AddDeckToGameResponse(
-        boolean gameSuccessfullyDeleted,
+        boolean success,
         String errorMessage,
         long gameId,
         long deckId

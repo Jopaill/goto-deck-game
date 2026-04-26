@@ -1,6 +1,6 @@
 package com.jordanpaille.deckgame.dto.responses;
 
 public record DeleteGameResponse(
-        boolean gameSuccessfullyDeleted,
+        boolean success,
         long gameId
 ) {}

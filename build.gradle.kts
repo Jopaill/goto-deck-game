@@ -34,6 +34,7 @@ dependencies {
 
 	// Test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testImplementation("ch.qos.logback:logback-classic:1.5.32")
 	testCompileOnly("org.projectlombok:lombok:1.18.44")

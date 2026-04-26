@@ -138,7 +138,7 @@ public class GameService {
         }
         Card card = game.getCards().removeFirst();
         player.addCardToHand(card);
-        return null;
+        return new DealCardResponse(true, null, gameId, username);
     }
 
     public GetPlayersResponse getPlayers(long gameId) {

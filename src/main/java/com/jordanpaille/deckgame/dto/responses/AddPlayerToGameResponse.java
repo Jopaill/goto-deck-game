@@ -1,7 +1,7 @@
 package com.jordanpaille.deckgame.dto.responses;
 
 public record AddPlayerToGameResponse(
-        boolean addPlayerToGameCompleted,
+        boolean success,
         String errorMessage,
         long gameId,
         String username

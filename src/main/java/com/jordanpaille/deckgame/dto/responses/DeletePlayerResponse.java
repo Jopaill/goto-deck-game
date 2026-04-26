@@ -1,6 +1,6 @@
 package com.jordanpaille.deckgame.dto.responses;
 
 public record DeletePlayerResponse(
-    boolean playerDeleted,
+    boolean success,
     String username
 ) {}

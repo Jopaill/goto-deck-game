@@ -1,7 +1,7 @@
 package com.jordanpaille.deckgame.dto.responses;
 
 public record RemovePlayerFromGameResponse(
-        boolean removalCompleted,
+        boolean success,
         String errorMessage,
         long gameId,
         String username
