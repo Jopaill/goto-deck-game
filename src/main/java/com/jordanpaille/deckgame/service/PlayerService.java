@@ -6,6 +6,7 @@ import com.jordanpaille.deckgame.dto.responses.CreatePlayerResponse;
 import com.jordanpaille.deckgame.dto.responses.DeletePlayerResponse;
 import com.jordanpaille.deckgame.dto.responses.GetPlayerResponse;
 import com.jordanpaille.deckgame.exceptions.GameException;
+import com.jordanpaille.deckgame.utils.UsernameValidator;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,10 @@ public class PlayerService {
 
 
     public CreatePlayerResponse createPlayer(String username) {
+        String validationError = UsernameValidator.validate(username);
+        if (validationError != null) {
+            return new CreatePlayerResponse(false, validationError, username);
+        }
         try {
             playerDao.addPlayer(new Player(username));
             return new CreatePlayerResponse(true, null, username);
