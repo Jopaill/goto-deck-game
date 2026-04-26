@@ -1,0 +1,70 @@
+package com.jordanpaille.deckgame.controller;
+
+import com.jordanpaille.deckgame.dto.Game;
+import com.jordanpaille.deckgame.dto.responses.*;
+import com.jordanpaille.deckgame.service.GameService;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+public class GameController {
+    private final GameService gameService;
+
+    public GameController(GameService gameService) {
+        this.gameService = gameService;
+    }
+
+    @Operation(summary = "Create a game")
+    @PostMapping("/games")
+    public Game createGame() {
+        return gameService.createGame();
+    }
+
+    @Operation(summary = "Verify that Game with a gameId exists")
+    @GetMapping("/games/{gameId}")
+    public GetGameResponse getGame(@PathVariable long gameId) {
+        return gameService.getGame(gameId);
+    }
+
+    @Operation(summary = "Delete a game")
+    @DeleteMapping("/games/{gameId}")
+    public DeleteGameResponse deleteGame(@PathVariable long gameId) {
+        return gameService.deleteGame(gameId);
+    }
+
+    @Operation(summary = "Add a deck to a game")
+    @PostMapping("/games/{gameId}/decks/{deckId}")
+    public AddDeckToGameResponse addDeckToGame(@PathVariable long gameId, @PathVariable long deckId) {
+        return gameService.addDeckToGame(gameId, deckId);
+    }
+
+    @Operation(summary = "Add a player to a game")
+    @PostMapping("/games/{gameId}/players/{username}")
+    public AddPlayerToGameResponse addPlayerToGame(@PathVariable long gameId, @PathVariable String username) {
+        return gameService.addPlayerToGame(gameId, username);
+    }
+
+    @Operation(summary = "Remove a player from a game")
+    @DeleteMapping("/games/{gameId}/players/{username}")
+    public RemovePlayerFromGameResponse removePlayerFromGame(@PathVariable long gameId, @PathVariable String username) {
+        return gameService.removePlayerFromGame(gameId, username);
+    }
+
+    @Operation(summary = "Deal a single card to a player")
+    @PostMapping("/games/{gameId}/players/{username}/hand/cards")
+    public DealCardResponse dealCard(@PathVariable long gameId, @PathVariable String username) {
+        return gameService.dealCard(gameId, username);
+    }
+
+    @Operation(summary = "Get the list of players for a game", description = "Input is the 'gameId'. Output is the whole list of players in that game along with the total added value of all the cards each player holds; use face values of cards only. Then sort the list in descending order, from the player with the highest value hand to the player with the lowest value hand: ○ For instance if player ‘A’ holds a 10 + King then her total value is 23 and player ‘B’ holds a 7 + Queen then his total value is 19, so player ‘A’ will be listed first followed by player ‘B’.")
+    @GetMapping("/games/{gameId}/players")
+    public GetPlayersResponse getPlayers(@PathVariable long gameId) {
+        return gameService.getPlayers(gameId);
+    }
+
+    @Operation(summary = "Count the number of cards left in game deck per suit")
+    @GetMapping("/games/{gameId}/count")
+    public GetCountPerSuitResponse getCountPerSuit(@PathVariable long gameId) {
+        return gameService.getCountPerSuit(gameId);
+    }
+}
