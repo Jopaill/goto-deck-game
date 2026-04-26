@@ -8,7 +8,7 @@ import java.util.*;
 public class ShuffleUtils {
     private static final Random random = new Random();
 
-     // Yates-Fisher algorithm was used here
+     // Fisher-Yates algorithm was used here
     public static void shuffle(List<Card> cards) {
         for (int i = cards.size() - 1; i > 0; i--) {
             int j = random.nextInt(i + 1);

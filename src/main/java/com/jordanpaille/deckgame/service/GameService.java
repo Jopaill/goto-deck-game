@@ -123,13 +123,13 @@ public class GameService {
         if (gameId != player.getGameId()) {
             return new RemovePlayerFromGameResponse(false, "Player with username " + username + " is not playing at Game #" + gameId, gameId, username);
         }
+
+        if (!game.removePlayer(player)) {
+            return new RemovePlayerFromGameResponse(false, "The removal of " + username + " failed at Game #" + gameId + ". Please try again.", gameId, username);
+        }
+
         player.leaveGame();
         player.getHand().clear();
-
-        // It is expected that the body of this if-block will never run.
-        if (!game.removePlayer(player)) {
-            return new RemovePlayerFromGameResponse(false, "Something wrong happened, even though Player with username " + username + " is part of Game #" + gameId + ". We weren't able to remove them...", gameId, username);
-        }
 
         return new RemovePlayerFromGameResponse(true, null, gameId, username);
     }
