@@ -14,7 +14,7 @@ public class PlayerWithScore extends Player implements Comparable<PlayerWithScor
     }
 
     @Override
-    public int compareTo(PlayerWithScore o) {
-        return o.score - this.score;
+    public int compareTo(PlayerWithScore otherPlayer) {
+        return Integer.compare(otherPlayer.score, this.score);
     }
 }

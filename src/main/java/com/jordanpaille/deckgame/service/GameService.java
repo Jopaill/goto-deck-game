@@ -79,7 +79,6 @@ public class GameService {
 
         // Shuffle the cards
         List<Card> cards = deck.getCardDeck();
-        ShuffleUtils.shuffle(cards);
 
         synchronized (game) {
             // Add the cards to the game
