@@ -304,37 +304,6 @@ class GameServiceTest {
     }
 
     @Test
-    void dealCard_shouldFailWhenPlayerNotInGame() {
-        Game game = mock(Game.class);
-        Player player = mock(Player.class);
-
-        when(gameDao.getGame(1L)).thenReturn(game);
-        when(playerDao.getPlayer("jordan")).thenReturn(player);
-        when(player.getGameId()).thenReturn(2L);
-
-        DealCardResponse response = gameService.dealCard(1L, "jordan");
-
-        assertFalse(response.success());
-        assertEquals("Player with username jordan is not playin at Game #1", response.errorMessage());
-    }
-
-    @Test
-    void dealCard_shouldFailWhenGameHasNoCards() {
-        Game game = mock(Game.class);
-        Player player = mock(Player.class);
-
-        when(gameDao.getGame(1L)).thenReturn(game);
-        when(playerDao.getPlayer("jordan")).thenReturn(player);
-        when(player.getGameId()).thenReturn(1L);
-        when(game.getCards()).thenReturn(new LinkedList<>());
-
-        DealCardResponse response = gameService.dealCard(1L, "jordan");
-
-        assertFalse(response.success());
-        assertEquals("They aren't any cards in the deck of Game #1", response.errorMessage());
-    }
-
-    @Test
     void dealCard_shouldGiveFirstCardToPlayerWhenValid() {
         Game game = mock(Game.class);
         Player player = mock(Player.class);

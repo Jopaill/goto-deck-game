@@ -120,28 +120,42 @@ public class GameService {
         return new RemovePlayerFromGameResponse(true, null, gameId, username);
     }
 
-    public DealCardResponse dealCard(long gameId, String username) {
+    public DealCardResponse dealCard(long gameId, String username, int count) {
         // Verifications
         Game game = gameDao.getGame(gameId);
         if (null == game) {
-            return new DealCardResponse(false, "Game #" + gameId + " does not exist", gameId, username);
+            return new DealCardResponse(false, "Game #" + gameId + " does not exist", gameId, username, count, 0);
         }
 
         Player player = playerDao.getPlayer(username);
         if (null == player) {
-            return new DealCardResponse(false, "Player with username " + username + " does not exist", gameId, username);
+            return new DealCardResponse(false, "Player with username " + username + " does not exist", gameId, username, count, 0);
         }
 
         if (player.getGameId() != gameId) {
-            return new DealCardResponse(false, "Player with username " + username + " is not playin at Game #" + gameId, gameId, username);
+            return new DealCardResponse(false, "Player with username " + username + " is not playing at Game #" + gameId, gameId, username, count, 0);
+        }
+
+        if (count <= 0) {
+            return new DealCardResponse(false, "Card count must be greater than 0", gameId, username, count, 0);
         }
 
         if (game.getCards().isEmpty()) {
-            return new DealCardResponse(false, "They aren't any cards in the deck of Game #" + gameId, gameId, username);
+            return new DealCardResponse(false, "There aren't any cards in the deck of Game #" + gameId, gameId, username, count, 0);
         }
-        Card card = game.getCards().removeFirst();
-        player.addCardToHand(card);
-        return new DealCardResponse(true, null, gameId, username);
+
+        int dealtCardCount = 0;
+        while (dealtCardCount < count && !game.getCards().isEmpty()) {
+            Card card = game.getCards().removeFirst();
+            player.addCardToHand(card);
+            dealtCardCount++;
+        }
+
+        return new DealCardResponse(true, null, gameId, username, count, dealtCardCount);
+    }
+
+    public DealCardResponse dealCard(long gameId, String username) {
+        return dealCard(gameId, username, 1);
     }
 
     public GetPlayersResponse getPlayers(long gameId) {
