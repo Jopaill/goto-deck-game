@@ -1,6 +1,6 @@
 # Notes for the Game
 
-## Requirements by GoTo
+## Requirements
 ```
 A Basic Deck of Cards Game
 
@@ -34,14 +34,14 @@ We have intentionally left many details of this assignment vague. You should fol
 
 While this is a trivial assignment, pretend that this code will become a foundational part of a new product. Take whatever measures you feel are required for your code to meet this bar within the scope of the allotted time and be prepared to discuss the tradeoffs you made.
 
-You may use generative AI tools to help you complete this. The use of such tools is encouraged at GoTo. Know however that you will be asked in-depth questions about your code in the live interview.
+You may use generative AI tools to help you complete this. The use of such tools is encouraged. Know however that you will be asked in-depth questions about your code in the live interview.
 ```
 
 
 ## How to run the project
 
 1. Open the project in IntelliJ and run `gradle build`
-2. Open the file `GotoGameApplication.java` and click the run button in the gutter
+2. Open the file `GameApplication.java` and click the run button in the gutter
 3. Go to `http://localhost:8080/swagger-ui/index.html`
 
 The application's swagger should open up.

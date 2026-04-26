@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @Slf4j
-public class GotoGameApplication {
+public class GameApplication {
 	static void main(String[] args) {
-		log.info("Starting GotoGameApplication");
-		SpringApplication.run(com.jordanpaille.deckgame.GotoGameApplication.class, args);
+		log.info("Starting GameApplication");
+		SpringApplication.run(GameApplication.class, args);
 	}
 
 }
