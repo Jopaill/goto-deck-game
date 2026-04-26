@@ -125,6 +125,7 @@ public class GameService {
             return new RemovePlayerFromGameResponse(false, "Player with username " + username + " is not playing at Game #" + gameId, gameId, username);
         }
         player.leaveGame();
+        player.getHand().clear();
 
         // It is expected that the body of this if-block will never run.
         if (!game.removePlayer(player)) {
