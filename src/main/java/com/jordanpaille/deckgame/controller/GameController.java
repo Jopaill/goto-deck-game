@@ -66,23 +66,23 @@ public class GameController {
         return gameService.getPlayers(gameId);
     }
 
-    @Operation(summary = "Count the number of cards left in game deck per suit")
-    @GetMapping("/games/{gameId}/count")
+    @Operation(summary = "Count the number of undealt cards left in the game shoe per suit")
+    @GetMapping("/games/{gameId}/shoe/suits/counts")
     public GetCountPerSuitResponse getCountPerSuit(@PathVariable long gameId) {
         return gameService.getCountPerSuit(gameId);
     }
 
-    @Operation(summary = "Shuffle the game deck")
-    @PostMapping("/games/{gameId}/deck/shuffle")
+    @Operation(summary = "Shuffle the game shoe")
+    @PostMapping("/games/{gameId}/shoe/shuffle")
     public ShuffleGameDeckResponse shuffleGameDeck(@PathVariable long gameId) {
         return gameService.shuffleGameDeck(gameId);
     }
 
     @Operation(
-            summary = "Get count of each remaining card in the game deck",
+            summary = "Get count of each remaining card in the game shoe",
             description = "Returns counts grouped by suit and rank, sorted by suit in the order hearts, spades, clubs, diamonds, then by rank from King down to Ace."
     )
-    @GetMapping("/games/{gameId}/deck/cards/counts")
+    @GetMapping("/games/{gameId}/shoe/cards/counts")
     public GetRemainingCardCountsResponse getRemainingCardCounts(@PathVariable long gameId) {
         return gameService.getRemainingCardCounts(gameId);
     }
